@@ -6,7 +6,22 @@
 </head>
 <body>
 
+<a href="{% url 'demo:index' %}" >index</a>
+<br>
+
 {{ count_list }}
+
+<table>
+    <tbody>
+    {% for c in count_list %}
+    <tr>
+        <td>{{ c.text }}</td>
+        <td>{{ c.count }}</td>
+        <td>TODO: 此处应有count++按钮</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
 </body>
 </html>
