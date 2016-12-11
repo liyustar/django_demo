@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 import logging
 
@@ -23,4 +26,19 @@ class CountListView(generic.ListView):
 
     def get_queryset(self):
         return Counter.objects.all()
+
+
+def add(request):
+    t = request.POST['name']
+    try:
+        c = Counter.objects.get(text=t)
+    except Counter.DoesNotExist:
+        logger.info("add %s" % t)
+        c = Counter(text=t, count=0)
+        c.save()
+    else:
+        c.count += 1
+        c.save()
+    return HttpResponseRedirect(reverse('demo:count_list'))
+
 

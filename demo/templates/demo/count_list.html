@@ -22,6 +22,15 @@
     {% endfor %}
     </tbody>
 </table>
+<br>
+<p>Add Counter</p>
+<form action="{% url 'demo:add' %}" method="post">
+    {% csrf_token %}
+    Counter name:<br>
+    <input type="text" name="name">
+    <br>
+    <input type="submit" value="Submit">
+</form>
 
 </body>
 </html>
