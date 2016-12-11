@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email</title>
+</head>
+<body>
+<a href="{% url 'demo:index' %}" >index</a>
+<br>
+
+<form action="{% url 'demo:send_email' %}" method="post">
+    {% csrf_token %}
+    Email Address:
+    <input type="text" name="address" value="284416589@qq.com"/>
+    <br>
+    Content:
+    <input type="text" name="content"/>
+    <br>
+    <input type="submit" value="Send"/>
+</form>
+
+</body>
+</html>

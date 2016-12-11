@@ -42,3 +42,11 @@ def add(request):
     return HttpResponseRedirect(reverse('demo:count_list'))
 
 
+class EmailView(generic.TemplateView):
+    template_name = "demo/email.html"
+    logger.info("Email_init")
+
+
+def send_email(request):
+    logger.info("send email")
+    return HttpResponseRedirect(reverse('demo:email'))
