@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -48,5 +49,11 @@ class EmailView(generic.TemplateView):
 
 
 def send_email(request):
-    logger.info("send email")
+    text = request.POST['content']
+    logger.info("send_email: text<%s>" % text)
+    send_mail('Subject here',
+              text,
+              '284416589@qq.com',
+              ['284416589@qq.com'],
+              fail_silently=False)
     return HttpResponseRedirect(reverse('demo:email'))
