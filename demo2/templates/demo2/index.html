@@ -18,6 +18,15 @@
 {##}
 {#</ul>#}
 
+{% if latest_fundinfo_list %}
+    <ul>
+    {% for fund in latest_fundinfo_list %}
+        <li><a href="/demo2/{{ fund.id }}/">{{ fund.symbol }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No FUNDs are available.</p>
+{% endif %}
 
 </body>
 </html>

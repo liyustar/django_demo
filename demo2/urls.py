@@ -1,13 +1,16 @@
 from django.conf.urls import url
-
 from . import views
 
 app_name = 'demo2'
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    # url(r'^count_list/$', views.CountListView.as_view(), name='count_list'),
-    # url(r'^count_list/add$', views.add, name='add'),
-    # url(r'^email$', views.EmailView.as_view(), name='email'),
-    # url(r'^email/send$', views.send_email, name='send_email'),
+    # ex: /demo2/
+    # url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^$', views.index, name='index'),
+    # ex: /demo2/5/
+    url(r'^(?P<fund_id>[0-9]+)/$', views.detail, name='detail'),
+    # ex: /demo2/5/results/
+    url(r'^(?P<fund_id>[0-9]+)/results/$', views.results, name='results'),
+    # ex: /demo2/5/vote/
+    url(r'^(?P<fund_id>[0-9]+)/vote/$', views.vote, name='vote'),
 ]
