@@ -1,4 +1,4 @@
-from django.db import models
+demo2/templates/demo2/index.htmlfrom django.db import models
 
 # Create your models here.
 
@@ -17,4 +17,14 @@ class FundInfo(models.Model):
     update_time = models.DateTimeField(null=True)
 
     def __str__(self):
-        return self.text
+        return self.name
+
+
+class PageContent(models.Model):
+    id = models.AutoField(primary_key=True)
+    url = models.CharField(max_length=512)
+    content = models.TextField()
+    update_time = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return self.url

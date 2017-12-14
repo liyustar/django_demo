@@ -28,5 +28,22 @@
     <p>No FUNDs are available.</p>
 {% endif %}
 
+
+{#<h2>{{ question.question_text }}</h2>#}
+<h2>抓取网址</h2>
+
+{#{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}#}
+
+<form action="{% url 'demo2:download_html' %}" method="post">
+{#Cross Site Request Forgeries#}
+{% csrf_token %}
+    <input type="text" name="url" value="https://cn.morningstar.com/fundcompany/default.aspx"/>
+{#{% for choice in question.choice_set.all %}#}
+{#    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />#}
+{#    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />#}
+{#{% endfor %}#}
+<input type="submit" value="抓页面" />
+</form>
+
 </body>
 </html>

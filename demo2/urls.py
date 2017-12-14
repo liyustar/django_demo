@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^(?P<fund_id>[0-9]+)/results/$', views.results, name='results'),
     # ex: /demo2/5/vote/
     url(r'^(?P<fund_id>[0-9]+)/vote/$', views.vote, name='vote'),
+    url(r'^download_html/$', views.download_html, name='download_html'),
 ]
