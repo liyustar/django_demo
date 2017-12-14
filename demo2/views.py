@@ -7,7 +7,7 @@ from django.views import generic
 from django.template import loader
 
 from demo2.models import FundInfo, PageContent
-from .spider import util
+from .spider import util, mstar_fund
 from django.utils import timezone
 
 logger = logging.getLogger(__name__)
@@ -20,8 +20,16 @@ class IndexView(generic.TemplateView):
         return super().get(request, *args, **kwargs)
 
 def index(request):
-    latest_fundinfo_list = FundInfo.objects.order_by('-update_time')[:5]
+    latest_page_list = PageContent.objects.order_by('-update_time')[:5]
     template = loader.get_template('demo2/index.html')  # 获取模版
+    context = {
+        'latest_page_list': latest_page_list,   # 模版参数赋值
+    }
+    return HttpResponse(template.render(context, request))  # 渲染
+
+def funds(request):
+    latest_fundinfo_list = FundInfo.objects.order_by('-update_time')[:5]
+    template = loader.get_template('demo2/funds.html')  # 获取模版
     context = {
         'latest_fundinfo_list': latest_fundinfo_list,   # 模版参数赋值
     }
@@ -57,4 +65,14 @@ def download_html(request):
 
     return HttpResponse("download_html %s\n%s" % (url_str, html))
 
+
+def analyze_page(request):
+    pageid = request.POST['pageid']
+
+    try:
+        pc = PageContent.objects.get(id=pageid)
+        mstar_fund.analyContent(pc.content)
+        return HttpResponse("analyze done.")
+    except PageContent.DoesNotExist:
+        return HttpResponse("page not fund. pageid<%s>" % pageid)
 

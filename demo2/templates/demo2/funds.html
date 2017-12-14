@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Funds</title>
+</head>
+<body>
+
+{% if latest_fundinfo_list %}
+    <ul>
+    {% for fund in latest_fundinfo_list %}
+        <li><a href="/demo2/{{ fund.id }}/">{{ fund.symbol }} {{ fund.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No FUNDs are available.</p>
+{% endif %}
+
+</body>
+</html>

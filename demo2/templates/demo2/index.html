@@ -8,25 +8,14 @@
 
 <h1>Demo 2 .</h1>
 
-{#<ul>#}
-{#    <li>#}
-{#        <a href="{% url 'demo:count_list' %}">count_list.html</a>#}
-{#    </li>#}
+<ul>
+    <li>
+        <a href="{% url 'demo2:funds' %}">funds.html</a>
+    </li>
 {#    <li>#}
 {#        <a href="{% url 'demo:email' %}">email.html</a>#}
 {#    </li>#}
-{##}
-{#</ul>#}
-
-{% if latest_fundinfo_list %}
-    <ul>
-    {% for fund in latest_fundinfo_list %}
-        <li><a href="/demo2/{{ fund.id }}/">{{ fund.symbol }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No FUNDs are available.</p>
-{% endif %}
+</ul>
 
 
 {#<h2>{{ question.question_text }}</h2>#}
@@ -38,11 +27,33 @@
 {#Cross Site Request Forgeries#}
 {% csrf_token %}
     <input type="text" name="url" value="https://cn.morningstar.com/fundcompany/default.aspx"/>
-{#{% for choice in question.choice_set.all %}#}
-{#    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />#}
-{#    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />#}
-{#{% endfor %}#}
 <input type="submit" value="抓页面" />
+</form>
+
+
+<h2>分析页面</h2>
+
+{% if latest_page_list %}
+    <ul>
+        {% for page in latest_page_list %}
+            <li>{{ page.id }} {{ page.url }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No Pages are available.</p>
+{% endif %}
+
+
+<form action="{% url 'demo2:analyze_page' %}" method="post">
+    {#Cross Site Request Forgeries#}
+    {% csrf_token %}
+    <input type="text" name="pageid" />
+{#    分析程序选择#}
+    {#{% for choice in question.choice_set.all %}#}
+    {#    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />#}
+    {#    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />#}
+    {#{% endfor %}#}
+    <input type="submit" value="分析页面" />
 </form>
 
 </body>

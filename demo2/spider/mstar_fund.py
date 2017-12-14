@@ -5,7 +5,10 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from pandas import DataFrame
 
-import util
+import logging
+# from . import util
+
+logger = logging.getLogger(__name__)
 
 # 基金分类
 category = [
@@ -91,6 +94,7 @@ def analyContent(content):
     tr_list = soup.select('.fr_tablecontent tr')[:-1]
 
     fundInfoList = [getFundInfo(tr) for tr in tr_list]
+    logger.debug(fundInfoList)
     df = DataFrame(fundInfoList)
     df = df.replace('-', np.nan)
     df[['rank','return','risk3','sharp3','wave3']] = df[['rank','return','risk3','sharp3','wave3']].apply(pd.to_numeric)
@@ -106,7 +110,8 @@ if __name__ == '__main__':
     # content = util.getHtml(temp_utl)
     # util.saveHtml('mstar_fund.html', content)
     
-    content = util.loadHtml('mstar_fund.html')
+    # content = util.loadHtml('mstar_fund.html')
     
-    analyContent(content)
+    # analyContent(content)
+    pass
     
