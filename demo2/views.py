@@ -6,8 +6,9 @@ from django.http import HttpResponse
 from django.views import generic
 from django.template import loader
 
-from demo2.models import FundInfo
+from demo2.models import FundInfo, PageContent
 from .spider import util
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -39,5 +40,21 @@ def vote(request, fund_id):
 def download_html(request):
     url_str = request.POST['url']
     html = util.getHtml(url_str)
+
+    old_pc = None
+    try:
+        old_pc = PageContent.objects.get(url=url_str)
+    except PageContent.DoesNotExist:
+        pass
+
+    if old_pc != None:
+        old_pc.content = html
+        old_pc.update_time = timezone.now()
+        old_pc.save()
+    else:
+        pc = PageContent(url=url_str, content=html, update_time=timezone.now())
+        pc.save()
+
     return HttpResponse("download_html %s\n%s" % (url_str, html))
+
 
