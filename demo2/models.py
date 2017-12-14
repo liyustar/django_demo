@@ -1,4 +1,4 @@
-demo2/templates/demo2/index.htmlfrom django.db import models
+from django.db import models
 
 # Create your models here.
 
