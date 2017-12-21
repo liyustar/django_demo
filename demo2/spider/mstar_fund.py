@@ -8,6 +8,9 @@ from pandas import DataFrame
 import logging
 # from . import util
 
+from demo2.models import FundInfo
+from django.utils import timezone
+
 logger = logging.getLogger(__name__)
 
 # 基金分类
@@ -52,7 +55,7 @@ temp_utl = 'http://morningstar.cn/handler/fundranking.ashx?' \
 
 def getFundInfo(tr):
     fund = {}
-    fund['id'] = tr.select('td')[1].contents[0]['fid']
+    fund['fid'] = tr.select('td')[1].contents[0]['fid']
     fund['symbol'] = tr.select('td')[1].text
     fund['name'] = tr.select('a')[0].text
     fund['wave3'] = tr.select('td')[6].text
@@ -61,8 +64,8 @@ def getFundInfo(tr):
     fund['risk_evaluate3'] = tr.select('td')[9].text
     fund['sharp3'] = tr.select('td')[10].text
     fund['sharp_evaluate3'] = tr.select('td')[11].text
-    fund['return'] = tr.select('td')[12].text
-    fund['rank'] = tr.select('td')[13].text
+    fund['return_rate'] = tr.select('td')[12].text
+    fund['rank'] = str(tr.select('td')[13].text).replace('-', '0')
     return fund
 
 
@@ -83,10 +86,44 @@ def calStat(data):
 
 def calContentStatistics(df):
     print(df.columns)
-    rtn = [calStat(df[x]) for x in ['rank','return','risk3','sharp3','wave3']]
-    df_rtn = DataFrame(rtn, index=['rank','return','risk3','sharp3','wave3'])
+    rtn = [calStat(df[x]) for x in ['rank','return_rate','risk3','sharp3','wave3']]
+    df_rtn = DataFrame(rtn, index=['rank','return_rate','risk3','sharp3','wave3'])
     print(df_rtn)
     pass
+
+
+def saveFundInfoToDB(fundInfoList):
+    t = timezone.now()
+    for fund in fundInfoList:
+        fi = FundInfo(
+            # fid=fund['fid'],
+            symbol=fund['symbol'],
+            name=fund['name'],
+            wave3=fund['wave3'],
+            wave_evaluate3=fund['wave_evaluate3'],
+            risk3=fund['risk3'],
+            risk_evaluate3=fund['risk_evaluate3'],
+            sharp3=fund['sharp3'],
+            sharp_evaluate3=fund['sharp_evaluate3'],
+            return_rate=fund['return_rate'],
+            rank=fund['rank'],
+            update_time=t
+        )
+        fi.save()
+
+
+def saveDFToDB(df):
+    entries = []
+    t = timezone.now()
+    for e in df.T.to_dict().values():
+        entries.append(FundInfo(**e, update_time=t))
+    FundInfo.objects.bulk_create(entries)
+
+    # for e in df.T.to_dict().values():
+    #     fi = FundInfo.objects.filter(fid=e['fid'])
+    #     entries.append(FundInfo(**e, update_time=t))
+    # FundInfo.objects.bulk_create(entries)
+
 
 
 def analyContent(content):
@@ -94,15 +131,20 @@ def analyContent(content):
     tr_list = soup.select('.fr_tablecontent tr')[:-1]
 
     fundInfoList = [getFundInfo(tr) for tr in tr_list]
-    logger.debug(fundInfoList)
+    
+
+    # logger.debug(fundInfoList)
     df = DataFrame(fundInfoList)
     df = df.replace('-', np.nan)
-    df[['rank','return','risk3','sharp3','wave3']] = df[['rank','return','risk3','sharp3','wave3']].apply(pd.to_numeric)
-    print(df.head())
 
-    calContentStatistics(df)
-
-    return df
+    # saveFundInfoToDB(fundInfoList)
+    saveDFToDB(df)
+    # df[['rank','return_rate','risk3','sharp3','wave3']] = df[['rank','return_rate','risk3','sharp3','wave3']].apply(pd.to_numeric)
+    # print(df.head())
+    #
+    # calContentStatistics(df)
+    #
+    # return df
 
 
 if __name__ == '__main__':
