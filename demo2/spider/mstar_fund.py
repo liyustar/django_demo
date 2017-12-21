@@ -115,14 +115,15 @@ def saveFundInfoToDB(fundInfoList):
 def saveDFToDB(df):
     entries = []
     t = timezone.now()
-    for e in df.T.to_dict().values():
-        entries.append(FundInfo(**e, update_time=t))
-    FundInfo.objects.bulk_create(entries)
 
-    # for e in df.T.to_dict().values():
-    #     fi = FundInfo.objects.filter(fid=e['fid'])
-    #     entries.append(FundInfo(**e, update_time=t))
-    # FundInfo.objects.bulk_create(entries)
+    for e in df.T.to_dict().values():
+        fi_query_set = FundInfo.objects.filter(fid=e['fid'])
+        if fi_query_set.count() > 0:
+            fi_query_set.update(**e, update_time=t)
+        else:
+            entries.append(FundInfo(**e, update_time=t))
+
+    FundInfo.objects.bulk_create(entries)
 
 
 
