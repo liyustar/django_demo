@@ -27,6 +27,12 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))  # 渲染
 
+
+def reactjs(request):
+    template = loader.get_template('demo2/reactjs.html')  # 获取模版
+    return HttpResponse(template.render(request=request))  # 渲染
+
+
 def funds(request):
     latest_fundinfo_list = FundInfo.objects.order_by('-update_time')[:5]
     template = loader.get_template('demo2/funds.html')  # 获取模版

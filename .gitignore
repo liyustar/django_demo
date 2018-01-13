@@ -2,3 +2,8 @@
 __pycache__
 *.sqlite3
 workspace.xml
+tmp/
+
+node_modules/
+webpack-stats.json
+assets/bundles/

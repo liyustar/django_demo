@@ -7,6 +7,7 @@ urlpatterns = [
     # ex: /demo2/
     # url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^$', views.index, name='index'),
+    url(r'^reactjs/$', views.reactjs, name='reactjs'),
     url(r'^funds/$', views.funds, name='funds'),
     url(r'^download_html/$', views.download_html, name='download_html'),
     url(r'^analyze_page/$', views.analyze_page, name='analyze_page'),
