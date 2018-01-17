@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './app';
+import MyMenu from './menu';
 
-ReactDOM.render(<h1>Hello, world!</h1>, document.getElementById('react-app'))
+ReactDOM.render(<MyMenu />, document.getElementById('menu'));
+ReactDOM.render(<h3>Hello World.</h3>, document.getElementById('react-app'));

@@ -20,9 +20,22 @@ module.exports = {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader',
           query: {
-              presets:['react']
+              presets:['react'],
+              plugins: [
+                  ["import", {
+                      libraryName: "antd",
+                      style: true
+                  }],
+                  'transform-class-properties',
+              ]
           }
+
       }, // to transform JSX into JS
+      {
+          test: /\.less$/,
+          // use: ["style-loader", {loader: 'css-loader', options: {sourceMap: 1}}, "postcss-loader", "less-loader"]
+          use: ["style-loader", {loader: 'css-loader', options: {sourceMap: 1}}, "less-loader"]
+      }
     ],
   },
 
